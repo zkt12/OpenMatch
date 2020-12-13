@@ -97,16 +97,10 @@ docker run --gpus all --name=<container_name> -it -v /:/all/ --rm <image_name>:<
 ```python
 import torch
 import OpenMatch as om
-
-query = "Classification treatment COVID-19"
-doc = "By retrospectively tracking the dynamic changes of LYM% in death cases and cured cases, this study suggests that lymphocyte count is an effective and reliable indicator for disease classification and prognosis in COVID-19 patients."
-```
-
-\*  For bert-like models:
-
-```python
 from transformers import AutoTokenizer
 
+query = "Classification treatment COVID-19"
+doc = "By retrospectively tracking the dynamic changes of LYM% in death cases and cured cases ..."
 tokenizer = AutoTokenizer.from_pretrained("allenai/scibert_scivocab_uncased")
 input_ids = tokenizer.encode(query, doc)
 model = om.models.Bert("allenai/scibert_scivocab_uncased")
