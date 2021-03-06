@@ -96,30 +96,32 @@ docker run --gpus all --name=<container_name> -it -v /:/all/ --rm <image_name>:<
 
 ```python
 import torch
-import OpenMatch as om
+from OpenMatch import *
 from transformers import AutoTokenizer
 
 query = "Classification treatment COVID-19"
-doc = "By retrospectively tracking the dynamic changes of LYM% in death cases and cured cases ..."
-tokenizer = AutoTokenizer.from_pretrained("allenai/scibert_scivocab_uncased")
+doc = "By retrospectively tracking the dynamic changes of ..."
+tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
 input_ids = tokenizer.encode(query, doc)
-model = om.models.Bert("allenai/scibert_scivocab_uncased")
-ranking_score, ranking_features = model(torch.tensor(input_ids).unsqueeze(0))
+model = Bert("allenai/scibert_scivocab_uncased")
+ranking_score, ranking_features = model(
+    torch.tensor(input_ids).unsqueeze(0))
 ```
 
 \*  For other models:
 
 ```python
-tokenizer = om.data.tokenizers.WordTokenizer(pretrained="./data/glove.6B.300d.txt")
+tokenizer = WordTokenizer(pretrained="glove.6B.300d.txt")
 query_ids, query_masks = tokenizer.process(query, max_len=16)
 doc_ids, doc_masks = tokenizer.process(doc, max_len=128)
-model = om.models.KNRM(vocab_size=tokenizer.get_vocab_size(),
-                       embed_dim=tokenizer.get_embed_dim(),
-                       embed_matrix=tokenizer.get_embed_matrix())
-ranking_score, ranking_features = model(torch.tensor(query_ids).unsqueeze(0),
-                                        torch.tensor(query_masks).unsqueeze(0),
-                                        torch.tensor(doc_ids).unsqueeze(0),
-                                        torch.tensor(doc_masks).unsqueeze(0))
+model = KNRM(vocab_size=tokenizer.get_vocab_size(),
+             embed_dim=tokenizer.get_embed_dim(),
+             embed_matrix=tokenizer.get_embed_matrix())
+ranking_score, ranking_features = model(
+    torch.tensor(query_ids).unsqueeze(0),
+    torch.tensor(query_masks).unsqueeze(0),
+    torch.tensor(doc_ids).unsqueeze(0),
+    torch.tensor(doc_masks).unsqueeze(0))
 ```
 
 \*  The GloVe can be downloaded using:
